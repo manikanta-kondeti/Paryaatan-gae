@@ -1,6 +1,6 @@
 queue:
 
-- name: ProductSearchIndexing
+- name: MemorySearchIndexing
   rate: 5/s
   bucket_size: 5
   max_concurrent_requests: 5
