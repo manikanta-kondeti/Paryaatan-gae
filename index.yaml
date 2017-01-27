@@ -1,0 +1,8 @@
+indexes:
+
+- kind: MemoryEntity
+  properties:
+  - name: description
+  - name: address
+  - name: updated_at
+    direction: desc

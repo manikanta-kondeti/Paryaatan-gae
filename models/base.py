@@ -15,5 +15,5 @@ class TimeTrackedModel(ndb.Model):
 
 
 class LocationEntity(TimeTrackedModel):
-    lat = ndb.floatProperty()
-    lng = ndb.floatProperty()
+    lat = ndb.FloatProperty()
+    lng = ndb.FloatProperty()

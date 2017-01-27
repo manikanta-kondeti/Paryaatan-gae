@@ -4,7 +4,6 @@ from util import ClassProperty
 
 from google.appengine.ext import ndb
 
-from models.voices import Test, VoiceEntity
 from util import identity
 
 

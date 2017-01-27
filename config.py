@@ -2,7 +2,7 @@
 import hashlib
 import datetime, random, string, time
 
-__author__ = 'minocha'
+__author__ = 'mani'
 
 # TODO: Replace the following lines with client IDs obtained from the APIs
 # Console or Cloud Console.

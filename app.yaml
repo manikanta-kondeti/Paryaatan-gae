@@ -20,6 +20,8 @@ libraries:
   version: 1.0
 - name: pycrypto
   version: latest
+- name: jinja2
+  version: "2.6"
 
 inbound_services:
 - warmup

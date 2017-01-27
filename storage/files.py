@@ -3,7 +3,7 @@ from collections import namedtuple
 import lib.cloudstorage as gcs
 
 # Constants and module globals
-BUCKET_ROOT = '/samosa_app_files'
+BUCKET_ROOT = '/paryaatan_files'
 BUCKET_PATH_SEP = '/'
 
 TypeDescriptor = namedtuple('TypeDescriptor', ['mime_type', 'bucket_path'])
