@@ -1,0 +1,27 @@
+application: foss4gasia-challenge
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+builtins:
+- remote_api: on
+- deferred: on
+
+handlers:
+- url: /_ah/spi/.*
+  script: main.app
+
+- url: /.*
+  script: webhandlers.memory.app
+
+libraries:
+- name: endpoints
+  version: 1.0
+- name: pycrypto
+  version: latest
+
+inbound_services:
+- warmup
+
+instance_class: F4
