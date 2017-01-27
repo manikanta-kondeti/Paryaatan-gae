@@ -3,7 +3,7 @@ from collections import namedtuple
 import lib.cloudstorage as gcs
 
 # Constants and module globals
-BUCKET_ROOT = '/paryaatan_files'
+BUCKET_ROOT = '/foss4gasia-challenge.appspot.com/uploaded_files'
 BUCKET_PATH_SEP = '/'
 
 TypeDescriptor = namedtuple('TypeDescriptor', ['mime_type', 'bucket_path'])
@@ -32,7 +32,7 @@ def _resolve_file_path(filename):
     if not type_description:
         raise UnknownFiletype('Unknown file type: %s, for file: %s' % (filename, filetype))
 
-    path = BUCKET_PATH_SEP.join([BUCKET_ROOT] + type_description.bucket_path)
+    path = BUCKET_PATH_SEP.join([BUCKET_ROOT] + type_description.bucket_path + [filename])
     return path, type_description.mime_type
 
 
@@ -49,6 +49,7 @@ def _gcs_open(filepath, mode, content_type=None, **kwargs):
             raise UnknownFiletype('Unknown file type for: %s' % filepath)
         content_type = desc.mime_type
     f = None
+    print "in _gcs_open " + filepath
     try:
         f = gcs.open(filepath, mode, content_type, **kwargs)
         yield f
@@ -71,6 +72,7 @@ def put_file(filename, contents):
     """
     # TODO: Eventually, validate given contents against the given type
     path, mime_type = _resolve_file_path(filename)
+    print path, mime_type
     with _gcs_open(path, mode='w', content_type=mime_type) as f:
         f.write(contents)
     return path, mime_type

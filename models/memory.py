@@ -7,8 +7,6 @@ from google.appengine.api import search
 from models.enum import MemoryTypes
 from storage import files
 import datetime
-from taskhandlers.app import create_location_index_for_memory
-from google.appengine.ext.deferred import deferred
 
 MEMORY_LOCATION_INDEX = "memory_location_index_v1"
 
@@ -40,13 +38,7 @@ class MemoryEntity(LocationEntity):
         memory.put()
         logging.log(logging.DEBUG, "Succesfully inserted into memory entity")
 
-        # Task handler to create location index
-        try:
-            deferred.defer(create_location_index_for_memory, memory_key=memory.key,
-                                   _queue='MemorySearchIndexing')
-        except Exception as e:
-            logging.error('successfully caught error while adding tasks. Nothing to panic! ' + str(e))
-            logging.error('could not search index for location:  task for %s' % memory.key.id())
+        memory.insert_memory_in_search_index_by_key(memory.key)
 
         return memory
 

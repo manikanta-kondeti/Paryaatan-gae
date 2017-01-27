@@ -1,7 +1,7 @@
 import endpoints
 
 
-marketplace_api = endpoints.api(
+paryaatan_api = endpoints.api(
     name='paryaatan',
     version='v1',
     allowed_client_ids = [
@@ -10,6 +10,6 @@ marketplace_api = endpoints.api(
 )
 
 
-@marketplace_api.api_class(resource_name='api')
-class MarketPlaceApi():
+@paryaatan_api.api_class(resource_name='api')
+class ParyaatanApi():
     pass

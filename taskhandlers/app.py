@@ -4,8 +4,6 @@ import random
 import re
 import urllib2
 from google.appengine.ext import ndb
-from models.memory import MemoryEntity
-
 #from models.user import PhonenumberEntity
 __author__ = 'mani'
 
@@ -62,7 +60,7 @@ def extract_address_from_latlon(key, latitude, longitude):
 
     return
 
-"""
+
 
 
 def create_location_index_for_memory(memory_key):
@@ -77,7 +75,7 @@ def create_location_index_for_memory(memory_key):
     MemoryEntity.insert_product_in_search_index_by_key(memory_key)
 
     return
-
+"""
 
 
 

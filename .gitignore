@@ -1,0 +1,19 @@
+# IDEs and Editors
+.idea
+.project
+.pydevproject
+*.swp
+generate_clients.sh
+*.log
+temp
+# Compiled sources
+*.pyc
+
+# Generated client library bundles
+# And unfortunately all zips
+*.zip
+
+#iOS client library
+*.discovery
+google_appengine/
+.DS_Store
