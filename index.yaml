@@ -3,5 +3,6 @@ indexes:
 - kind: MemoryEntity
   properties:
   - name: description
+  - name: type_of_memory
   - name: updated_at
     direction: desc

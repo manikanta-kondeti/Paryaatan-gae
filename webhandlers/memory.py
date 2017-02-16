@@ -4,6 +4,8 @@ import jinja2
 import os, json
 import logging
 from models.memory import MemoryEntity
+import lib.cloudstorage as gcs
+from google.appengine.api import app_identity
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -61,7 +63,15 @@ class GetUserMemoriesByKey(webapp2.RequestHandler):
 
 class GetUserMemoriesByExtent(webapp2.RequestHandler):
 
+    '''
+        @param : {top_left_lat, top_left_lng, bottom_right_lat, bottom_right_lng, id}
+    '''
     def get(self):
+        '''
+            logic:
+
+        :return:
+        '''
         return
 
     def options(self):
@@ -89,7 +99,7 @@ class UploadMemory(webapp2.RequestHandler):
 
         self.response.write(json.dumps({
                             "status" : "Succesfully Uploaded.. Keep adding!",
-                            "memory_url" :  memory_entity.url
+                            "memory_url" :  memory_entity.urlb
         }))
         logging.log(logging.DEBUG, 'Succesfully added memory into paryaatan..')
         return
@@ -99,7 +109,37 @@ class Hello(webapp2.RequestHandler):
 
     def get(self):
         self.response.write("Hello from paryaatan... backend started working!")
-        return
+
+        bucket_name = os.environ.get('BUCKET_NAME',
+                               app_identity.get_default_gcs_bucket_name())
+
+        self.response.headers['Content-Type'] = 'text/plain'
+        self.response.write('Demo GCS Application running from Version: '
+                      + os.environ['CURRENT_VERSION_ID'] + '\n')
+        self.response.write('Using bucket name: ' + bucket_name + '\n\n')
+
+        """Create a file.
+
+          The retry_params specified in the open call will override the default
+          retry params for this particular file handle.
+
+          Args:
+            filename: filename.
+        """
+        filename = "/foss4gasia-challenge.appspot.com/poster/uploaded_files/testing.txt"
+        self.response.write('Creating file %s\n' % filename)
+
+        write_retry_params = gcs.RetryParams(backoff_factor=1.1)
+        gcs_file = gcs.open(filename,
+                          'w',
+                          content_type='text/plain',
+                          options={'x-goog-meta-foo': 'foo',
+                                   'x-goog-meta-bar': 'bar'},
+                          retry_params=write_retry_params)
+        gcs_file.write('abcde\n')
+        gcs_file.write('f'*1024*4 + '\n')
+        gcs_file.close()
+
 
     def options(self):
         self.response.headers['Access-Control-Allow-Origin'] = '*'

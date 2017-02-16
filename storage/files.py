@@ -1,9 +1,10 @@
 from collections import namedtuple
+import cStringIO
 
 import lib.cloudstorage as gcs
 
 # Constants and module globals
-BUCKET_ROOT = '/foss4gasia-challenge.appspot.com/uploaded_files'
+BUCKET_ROOT = '/foss4gasia-challenge.appspot.com'
 BUCKET_PATH_SEP = '/'
 
 TypeDescriptor = namedtuple('TypeDescriptor', ['mime_type', 'bucket_path'])
@@ -49,7 +50,7 @@ def _gcs_open(filepath, mode, content_type=None, **kwargs):
             raise UnknownFiletype('Unknown file type for: %s' % filepath)
         content_type = desc.mime_type
     f = None
-    print "in _gcs_open " + filepath
+
     try:
         f = gcs.open(filepath, mode, content_type, **kwargs)
         yield f
@@ -72,7 +73,7 @@ def put_file(filename, contents):
     """
     # TODO: Eventually, validate given contents against the given type
     path, mime_type = _resolve_file_path(filename)
-    print path, mime_type
+
     with _gcs_open(path, mode='w', content_type=mime_type) as f:
         f.write(contents)
     return path, mime_type
@@ -87,5 +88,20 @@ def get_file(filename):
 
     return contents, mime_type
 
+def unicode_to_string(file_contents):
+    string_contents = cStringIO.StringIO()
+    string_contents.write(file_contents.decode('base64'))
+    string_contents.seek(0)
+    return string_contents.read()
+
+def store_image_file(filename, file_contents):
+    write_retry_params = gcs.RetryParams(backoff_factor=1.1)
+    gcs_file = gcs.open(filename,
+                          'w',
+                          content_type='image/jpeg',
+                          retry_params=write_retry_params)
+    gcs_file.write(file_contents)
+    gcs_file.close()
+    return
 
 # External facing helpers
